@@ -12,12 +12,12 @@
 			BuildingsOwned: Game.BuildingsOwned
 		};
 	}
-	function buy_cheapest_object() {
-		var cheapest = Game.ObjectsById.sort( function( a, b ) {
-			return a.price - b.price;
+	function buy_best_value_object() {
+		var best_value = Game.ObjectsById.sort( function( a, b ) {
+			return ( a.price / a.storedCps ) - ( b.price / b.storedCps );
 		})[0];
-		if( cheapest.price <= Game.cookies ) {
-			cheapest.buy();
+		if( best_value.price <= Game.cookies ) {
+			best_value.buy();
 			return true;
 		} else {
 			return false;
@@ -30,7 +30,7 @@
 	clearInterval( window.cutter_timer );
 	window.cutter_timer = setInterval( function() {
 		t++;
-		buy_cheapest_object() || click_cookie();
+		buy_best_value_object() || click_cookie();
 		progress();
 	}, 250);
 })();
