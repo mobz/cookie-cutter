@@ -10,3 +10,24 @@ instructions, open the game in the url above
 copy the code in cutter.js and paste into the javascript console
 
 it'll play the game for you!
+
+Obviously it is trivial to cheat in this game using the console. So, this code is about trying to figure out the optimal strategy using,
+The 'rules' are, you are allowed to perform one action every 250ms ( eg 4 clicks a second ), you are not allowed to modify the game other than by doiing something a human user would be able to.
+
+Current Strategy
+1) if there is a golden cookie click it
+2) if there is an upgrade that has higher 'value' than base_value and we can afford it - buy it
+3) find the object with the best value (best_value)
+	3a) if we can afford best_value - buy it ( store the value in base_value )
+	3b) if there is a different object that we can purchase that will pay itself back before the time taken to buy best_value - buy it 
+4) click the big cookie
+
+
+Appendix
+
+price - cost ( in cookies ) of purchasing an item
+cps - number ( in cookies per second ), refers to the amount of global cps gained by purchasing an upgrade
+value - time (in seconds) the time taken to repay the cost of purchasing an item  ( = price / cps );
+time_to_buy - number ( in seconds ) the time until we can afford to buy an item based on current cookies and global cps
+best_value - item that has the highest 'value'
+base_value - value of the last best_object purchased
