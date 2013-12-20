@@ -20,16 +20,29 @@
 			return false;
 		}
 	}
-	function buy_best_value_object() {
+	function buy_optimal_object() {
 		var best_value = Game.ObjectsById.sort( function( a, b ) {
 			return ( a.price / a.storedCps ) - ( b.price / b.storedCps );
 		})[0];
 		if( best_value.price <= Game.cookies ) {
+			console.log( "buying best value", best_value.name, "for", best_value.price );
 			best_value.buy();
 			return true;
 		} else {
-			return false;
+			var time_to_buy = ( best_value.price - Game.cookies ) / Game.cookiesPs;
+			var optimal = Game.ObjectsById
+				.filter( function(obj ) {
+					return obj.price <= Game.cookies;
+				}).sort( function( a, b ) {
+					return (a.price - ( a.storedCps * time_to_buy )) - (b.price - ( b.storedCps * time_to_buy ));
+				})[0];
+			if( optimal && ((optimal.storedCps * time_to_buy ) > optimal.price )) {
+				console.log( "buying optimal", optimal.name, optimal.storedCps, time_to_buy, optimal.storedCps * time_to_buy, optimal.price );
+				optimal.buy();
+				return true;
+			}
 		}
+		return false;
 	}
 	function click_cookie() {
 		Game.ClickCookie();
@@ -38,7 +51,7 @@
 	clearInterval( window.cutter_timer );
 	window.cutter_timer = setInterval( function() {
 		t++;
-		click_golden_cookie() || buy_best_value_object() || click_cookie();
+		click_golden_cookie() || buy_optimal_object() || click_cookie();
 		progress();
 	}, 250);
 })();
