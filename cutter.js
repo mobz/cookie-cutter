@@ -12,6 +12,14 @@
 			BuildingsOwned: Game.BuildingsOwned
 		};
 	}
+	function click_golden_cookie() {
+		if( document.getElementById("goldenCookie").style.display !== "none" ) {
+			Game.goldenCookie.click();
+			return true;
+		} else {
+			return false;
+		}
+	}
 	function buy_best_value_object() {
 		var best_value = Game.ObjectsById.sort( function( a, b ) {
 			return ( a.price / a.storedCps ) - ( b.price / b.storedCps );
@@ -30,7 +38,7 @@
 	clearInterval( window.cutter_timer );
 	window.cutter_timer = setInterval( function() {
 		t++;
-		buy_best_value_object() || click_cookie();
+		click_golden_cookie() || buy_best_value_object() || click_cookie();
 		progress();
 	}, 250);
 })();
