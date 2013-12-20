@@ -169,43 +169,40 @@
 			return false;
 		}
 	}
-	var base_value = 0;
-	function buy_upgrade() {
-		var best_upgrade = Game.UpgradesInStore.filter( function( ug ) {
-			return ug.basePrice <= Game.cookies && ( ug.basePrice / upgrades_cps[ ug.id ]() ) >= base_value;
-		})[0];
-		if( best_upgrade ) {
-			console.log( "buying best upgrade", best_upgrade.name, "@", upgrades_cps[ best_upgrade.id ](), "#", parseInt( best_upgrade.basePrice / upgrades_cps[ best_upgrade.id ](), 10) );
-			best_upgrade.buy();
-			return true;
-		} else {
-			return false;
-		}
+	function get_items() {
+		var items = Game.UpgradesInStore.map( function( ug ) {
+			var cps = upgrades_cps[ ug.id ]();
+			return { buy: ug.buy.bind( ug ), name: ug.name,	price: ug.basePrice, cps: cps, value: ug.basePrice / cps };
+		}).concat( Game.ObjectsById.map( function( obj ) {
+			return { buy: obj.buy.bind( obj ), name: obj.name, price: obj.price, cps: obj.storedCps, value: obj.price / obj.storedCps };
+		}) ).sort( function( a, b ) {
+			return a.value - b.value;
+		});
+		return items;
 	}
-	function buy_optimal_object() {
-		var best_value = Game.ObjectsById.sort( function( a, b ) {
-			return ( a.price / a.storedCps ) - ( b.price / b.storedCps );
-		})[0];
-		if( best_value.price <= Game.cookies ) {
-			base_value = best_value.price / best_value.storedCps;
-			console.log( "buying best value", best_value.name, "for", best_value.price );
-			best_value.buy();
+	function buy_item() {
+		var gCps = Game.cookiesPs;
+		var gCookies = Game.cookies;
+		var items = get_items();
+		var best_item = items[0];
+		if( best_item.price <= gCookies ) {
+			console.log( "buying (best)", best_item.name, parseInt(best_item.price, 10), "@", parseInt(best_item.cps, 10), "#", parseInt(best_item.value, 10) );
+			best_item.buy();
 			return true;
 		} else {
-			var time_to_buy = ( best_value.price - Game.cookies ) / Game.cookiesPs;
-			var optimal = Game.ObjectsById
-				.filter( function(obj ) {
-					return obj.price <= Game.cookies;
-				}).sort( function( a, b ) {
-					return (a.price - ( a.storedCps * time_to_buy )) - (b.price - ( b.storedCps * time_to_buy ));
-				})[0];
-			if( optimal && ((optimal.storedCps * time_to_buy ) > optimal.price )) {
-				console.log( "buying optimal", optimal.name, optimal.storedCps, time_to_buy, optimal.storedCps * time_to_buy, optimal.price );
+			var time_to_buy = ( best_item.price - gCookies ) / gCps;
+			var optimal = items
+				.filter( function( item ) {
+					return item.price <= gCookies;
+				} ).sort( function( a, b ) {
+					return (a.price - ( a.cps * time_to_buy )) - (b.price - ( b.cps * time_to_buy ));
+				} )[0];
+			if( optimal && ( optimal.cps * time_to_buy ) > optimal.price ) {
+				console.log( "buying (opti)", optimal.name, parseInt(optimal.price, 10), "@", parseInt(optimal.cps, 10), "#", parseInt(optimal.value, 10) );
 				optimal.buy();
 				return true;
 			}
 		}
-		return false;
 	}
 	function click_cookie() {
 		Game.ClickCookie();
@@ -214,7 +211,7 @@
 	clearInterval( window.cutter_timer );
 	window.cutter_timer = setInterval( function() {
 		t++;
-		click_golden_cookie() || buy_upgrade() || buy_optimal_object() || click_cookie();
+		click_golden_cookie() || buy_item() || click_cookie();
 		progress();
 	}, 250);
 })();
