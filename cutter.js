@@ -162,7 +162,7 @@
 		142: function() { return 0; } // wrinklers spawn more frequently
 	};
 	function click_golden_cookie() {
-		if( document.getElementById("goldenCookie").style.display !== "none" ) {
+		if( document.getElementById("goldenCookie").style.display === "block" ) {
 			Game.goldenCookie.click();
 			return true;
 		} else {
