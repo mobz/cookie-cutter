@@ -161,6 +161,37 @@
 		141: function() { return 0; }, // research 10 times faster
 		142: function() { return 0; } // wrinklers spawn more frequently
 	};
+	var postfix = " KMGTPEY".split("");
+	function price( k, sym ) {
+		var i = 0, pref = ( k < 0 ? "-" : " " ) + sym;
+		k = Math.abs( k );
+		while( k > 1000 ) {
+			k /= 1000;
+			i++;
+		}
+		var r = k.toFixed(1);
+		switch(r.length) {
+			case 6: return pref + "  " + (k/1000).toFixed(1) + postfix[i+1];
+			case 5: return pref + "" + k.toFixed(1) + postfix[i];
+			case 4: return pref + " " + k.toFixed(1) + postfix[i];
+			case 3: return pref + "  " + k.toFixed(1) + postfix[i];
+		}
+	}
+	function time( t ) {
+		var sign = t < 0 ? "-" : " ";
+		t = Math.abs( t );
+		var s = parseInt( t % 60, 10 );
+		var m = parseInt(( t / 60 ), 10);
+		var r = sign + m + ":" + ( s < 10 ? "0": "" ) + s;
+		while( r.length < 8 ) {
+			r = " " + r;
+		}
+		return r;
+	}
+	function log_purchase( item, reason ) {
+		console.log( "buy (" + reason + ")", price( item.price, "$" ), price( item.cps, "@" ), time( item.value ), item.name );
+	}
+
 	function click_golden_cookie() {
 		if( document.getElementById("goldenCookie").style.display === "block" ) {
 			Game.goldenCookie.click();
@@ -186,7 +217,7 @@
 		var items = get_items();
 		var best_item = items[0];
 		if( best_item.price <= gCookies ) {
-			console.log( "buying (best)", best_item.name, parseInt(best_item.price, 10), "@", parseInt(best_item.cps, 10), "#", parseInt(best_item.value, 10) );
+			log_purchase( best_item, "best" );
 			best_item.buy();
 			return true;
 		} else {
@@ -198,7 +229,7 @@
 					return (a.price - ( a.cps * time_to_buy )) - (b.price - ( b.cps * time_to_buy ));
 				} )[0];
 			if( optimal && ( optimal.cps * time_to_buy ) > optimal.price ) {
-				console.log( "buying (opti)", optimal.name, parseInt(optimal.price, 10), "@", parseInt(optimal.cps, 10), "#", parseInt(optimal.value, 10) );
+				log_purchase( optimal, "opti" );
 				optimal.buy();
 				return true;
 			}
