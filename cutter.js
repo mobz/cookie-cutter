@@ -56,14 +56,14 @@
 	function calc_upgrade_cps( ug ) {
 		ug.bought = true;
 		Game.CalculateGains();
-		var cps = Game.cookiesPs;
+		var cps = Game.cookiesPs + ( ESTIMATED_BIG_COOKIE_CLICKS_PER_SECOND * Game.mouseCps() );
 		ug.bought = false;
 		return cps;
 	}
 	function calc_object_cps( obj ) {
 		obj.amount++;
 		Game.CalculateGains();
-		var cps = Game.cookiesPs;
+		var cps = Game.cookiesPs + ( ESTIMATED_BIG_COOKIE_CLICKS_PER_SECOND * Game.mouseCps() );
 		obj.amount--;
 		return cps;
 	}
