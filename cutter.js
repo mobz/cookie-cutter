@@ -171,7 +171,7 @@
 	}
 	function get_items() {
 		var items = Game.UpgradesInStore.map( function( ug ) {
-			var cps = upgrades_cps[ ug.id ]();
+			var cps = ( upgrades_cps[ ug.id ] || function() { return 0; } )();
 			return { buy: ug.buy.bind( ug ), name: ug.name,	price: ug.basePrice, cps: cps, value: ug.basePrice / cps };
 		}).concat( Game.ObjectsById.map( function( obj ) {
 			return { buy: obj.buy.bind( obj ), name: obj.name, price: obj.price, cps: obj.storedCps, value: obj.price / obj.storedCps };
