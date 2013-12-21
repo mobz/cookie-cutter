@@ -181,8 +181,9 @@
 		var sign = t < 0 ? "-" : " ";
 		t = Math.abs( t );
 		var s = parseInt( t % 60, 10 );
-		var m = parseInt(( t / 60 ), 10);
-		var r = sign + m + ":" + ( s < 10 ? "0": "" ) + s;
+		var m = parseInt(( (t % 3600 ) / 60 ), 10);
+		var h = parseInt(( t / 3600 ), 10 );
+		var r = sign + h + ":" + ( m < 10 ? "0": "" ) + m + ":" + ( s < 10 ? "0": "" ) + s;
 		while( r.length < 8 ) {
 			r = " " + r;
 		}
