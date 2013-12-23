@@ -14,11 +14,13 @@ it'll play the game for you!
 Obviously it is trivial to cheat in this game using the console. So, this code is about trying to figure out the optimal strategy without 'cheating'. The code perform one action every 250ms ( eg 4 clicks a second ), you are not allowed to modify the game other than by doing something a human user would be able to.
 
 Current Strategy
-1) if there is a golden cookie click it
-2) create an array of all objects and upgrades ( calculating price, cps and value for each )
-	2a) if we can afford best_value - buy it
-	2b) if there is a different object that we can purchase that will pay itself back before the time taken to buy best_value - buy it 
-3) otherwise click the big cookie
+1) if there is a raindeer - click it
+2) if there is a santa upgrade we can afford - buy it
+3) if there is a golden cookie click it
+4) create an array of all objects and upgrades ( calculating price, cps and value for each )
+	4a) if we can afford best_value - buy it
+	4b) if there is a different object that we can purchase that will pay itself back before the time taken to buy best_value - buy it 
+5) otherwise click the big cookie
 
 
 Appendix

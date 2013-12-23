@@ -53,6 +53,23 @@
 			return false;
 		}
 	}
+	function handle_christmas() {
+		if(document.getElementById("seasonPopup").style.display === "block" ) {
+			console.log("click", Game.seasonPopup.type );
+			Game.seasonPopup.click();
+			return true;
+		} else if( Game.Has("A festive hat") && Game.santaLevel < 14 ) {
+			var santaCost = Math.pow( Game.santaLevel + 1, Game.santaLevel + 1 );
+			if( santaCost <= Game.cookies ) {
+				console.log("click", price( santaCost, "$"), Game.santaLevels[ Game.santaLevel ] );
+				Game.mouseX = 48;
+				Game.mouseY = Game.LeftBackground.canvas.height - 48 - 24;
+				Game.Click = 1;
+				return true;
+			}
+		}
+		return false;
+	}
 	function calc_upgrade_cps( ug ) {
 		ug.bought = true;
 		Game.CalculateGains();
@@ -112,7 +129,7 @@
 	clearInterval( window.cutter_timer );
 	window.cutter_timer = setInterval( function() {
 		t++;
-		click_golden_cookie() || buy_item() || click_cookie();
+		handle_christmas() || click_golden_cookie() || buy_item() || click_cookie();
 		progress();
 	}, 250);
 })();
