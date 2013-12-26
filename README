@@ -18,8 +18,9 @@ Current Strategy
 2) if there is a santa upgrade we can afford - buy it
 3) if there is a golden cookie click it
 4) create an array of all objects and upgrades ( calculating price, cps and value for each )
-	4a) if we can afford best_value - buy it
-	4b) if there is a different object that we can purchase that will pay itself back before the time taken to buy best_value - buy it 
+	4a) exclude 'One mind' ugrade - we can gain more from golden cookies
+	4b) if we can afford best_value - buy it
+	4c) if there is a different object that we can purchase that will pay itself back before the time taken to buy best_value - buy it 
 5) otherwise click the big cookie
 
 

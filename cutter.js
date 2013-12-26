@@ -61,7 +61,7 @@
 		} else if( Game.Has("A festive hat") && Game.santaLevel < 14 ) {
 			var santaCost = Math.pow( Game.santaLevel + 1, Game.santaLevel + 1 );
 			if( santaCost <= Game.cookies ) {
-				console.log("click", price( santaCost, "$"), Game.santaLevels[ Game.santaLevel ] );
+				console.log("buy (xmas)", price( santaCost, "$"), Game.santaLevels[ Game.santaLevel ] );
 				Game.mouseX = 48;
 				Game.mouseY = Game.LeftBackground.canvas.height - 48 - 24;
 				Game.Click = 1;
@@ -89,6 +89,8 @@
 		var items = Game.UpgradesInStore.map( function( ug ) {
 			var cps = calc_upgrade_cps( ug ) - orig_cps;
 			return { buy: ug.buy.bind( ug ), name: ug.name,	price: ug.basePrice, cps: cps, value: ug.basePrice / cps };
+		}).filter( function( ug ) {
+			return ug.id !== 69;
 		}).concat( Game.ObjectsById.map( function( obj ) {
 			var cps = calc_object_cps( obj ) - orig_cps;
 			return { buy: obj.buy.bind( obj ), name: obj.name, price: obj.price, cps: obj.storedCps, value: obj.price / obj.storedCps };
